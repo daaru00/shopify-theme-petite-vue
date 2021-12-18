@@ -1,0 +1,51 @@
+<script type="module">
+  import { createApp, reactive } from 'https://unpkg.com/petite-vue?module'
+  import { useProduct } from '{{ "product.js" | asset_url }}'
+  import { useCart } from '{{ "cart.js" | asset_url }}'
+
+  const { product, variant, updateVariantQueryParam, formatPrice } = useProduct('{{ product | json }}', '{{ product.selected_or_first_available_variant.id }}')
+  const { addVariantToCart, cart } = useCart('{{ cart | json }}')
+
+  createApp({
+    product,
+    variant,
+    cart,
+    formatPrice,
+    onVariantSelected(variant) {
+      updateVariantQueryParam(variant.id)
+      window.dispatchEvent(new CustomEvent('variantchanged', { detail: variant }));
+    },
+    async addToCart() {
+      console.log('adding..', this.variant)
+      await addVariantToCart(this.variant.id)
+      console.log('added!', this.variant)
+    }
+  }).mount('#page')
+</script>
+
+<section id="page">
+
+  <h1>{{ product.title }}</h1>
+
+  {% if product.has_only_default_variant %}
+    <h3>{{ product.price | money }}</h3>
+  {% else %}
+    <h3 v-text="formatPrice(variant.price)">{{ product.selected_or_first_available_variant.price | money }}</h3>
+
+    <p>
+      <select v-model="variant" v-effect="onVariantSelected(variant)">
+        <option
+          v-for="variant in product.variants" 
+          :key="variant.id"  
+          :value="variant"
+          v-text="variant.title">
+        </option>
+      </select>
+    </p>
+  {% endif %}
+
+  <button class="primary" @click="addToCart()" :disabled="cart.loading">
+    {{ 'products.product.add_to_cart' | t }}
+  </button>
+
+</section>

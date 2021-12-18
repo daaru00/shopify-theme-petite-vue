@@ -1,0 +1,17 @@
+<h1>{{ collection.title }}</h1>
+
+{%- if collection.description != blank -%}
+  <p>{{ collection.description }}</p>
+{%- endif -%}
+
+<div class="grid">
+  {%- for product in collection.products -%}
+    <article class="product-card">
+      <img v-if="product.featured_image" :src="product.featured_image" />
+      <a href="{{ product.url }}">
+        <h2>{{ product.title }}</h2>
+      </a>
+      <h3>{{ product.price | money }}</h3>
+    </article>
+  {% endfor %}
+  </div>

@@ -1,0 +1,65 @@
+/*
+ * Required
+ */
+
+[v-cloak] {
+  opacity: 0;
+}
+
+/*
+ * Minimal styles
+ */
+
+body {
+  margin: 0;
+  font-family: 'Lato', Arial, sans-serif;
+  font-weight: lighter;
+
+  display: grid;
+  gap: 0;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "header"
+    "nav"
+    "content"
+    "footer";
+}
+
+@media (max-width: 600px) {
+  body {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "header"
+      "nav"
+      "content"
+      "footer";
+  }
+}
+
+header {
+  grid-area: header;
+}
+
+main {
+  grid-area: content;
+  min-height: calc(100vh - 10em);
+  padding: 0 2em 2em;
+}
+ 
+footer {
+  grid-area: footer;
+}
+
+nav {
+  grid-area: nav;
+}
+
+.icon {
+  height: 2em;
+  width: 2em;
+}
+
+strong {
+  font-weight: bold;
+  font-size: 1.2em;
+}

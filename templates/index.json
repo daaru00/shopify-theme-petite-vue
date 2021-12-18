@@ -1,0 +1,18 @@
+{
+  "sections": {
+    "hero": {
+      "type": "text",
+      "settings": {
+        "title": "Home Page",
+        "body": "<p>this is the <b>home</b></p>"
+      }
+    },
+    "products": {
+      "type": "products-list"
+    }
+  },
+  "order": [
+    "hero",
+    "products"
+  ]
+}

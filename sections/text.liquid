@@ -1,0 +1,26 @@
+<h2 class="hero">{{ section.settings.title }}</h2>
+<h3 class="hero">{{ section.settings.body }}</h3>
+
+{% schema %}
+{
+  "name": "text",
+  "tag": "section",
+  "settings": [
+    {
+      "id": "title",
+      "type": "text",
+      "label": "Title",
+      "default": "Title"
+    },
+    {
+      "id": "body",
+      "type": "richtext",
+      "label": "Add custom text below",
+      "default": "<p>Add your text here</p>"
+    }
+  ],
+  "presets": [{
+    "name": "Text Section"
+  }]
+}
+{% endschema %}

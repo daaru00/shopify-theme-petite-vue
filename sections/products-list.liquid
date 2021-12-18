@@ -1,0 +1,27 @@
+<div class="grid">
+{% for product in section.settings.collection.products %}
+  <article class="product-card">
+    <img v-if="product.featured_image" :src="product.featured_image" />
+    <a href="{{ product.url }}">
+      <h2>{{ product.title }}</h2>
+    </a>
+    <h3>{{ product.price | money }}</h3>
+  </article>
+{% endfor %}
+</div>
+
+{% schema %}
+{
+  "name": "products-list",
+  "settings": [
+    {
+      "id": "collection",
+      "type": "collection",
+      "label": "Collection"
+    }
+  ],
+  "presets": [{
+    "name": "Products List"
+  }]
+}
+{% endschema %}

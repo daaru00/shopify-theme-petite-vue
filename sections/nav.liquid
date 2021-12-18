@@ -1,0 +1,24 @@
+<nav class="nav-content">
+  <ul>
+    {% for link in section.settings.menu.links %}
+      <li 
+        {% if link.current %}aria-current="page" class="highlight"{% endif %} 
+      ><a href="{{ link.url }}">{{ link.title }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
+
+{% schema %}
+{
+  "name": "nav",
+  "class": "nav",
+  "tag": "div",
+  "settings": [
+    {
+      "id": "menu",
+      "type": "link_list",
+      "label": "Links"
+    }
+  ]
+}
+{% endschema %}
