@@ -44,7 +44,7 @@
     </p>
   {% endif %}
 
-  <button class="primary" @click="addToCart()" :disabled="cart.loading">
+  <button v-cloak class="primary" @click="addToCart()" :disabled="cart.loading">
     {{ 'products.product.add_to_cart' | t }}
   </button>
 

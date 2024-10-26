@@ -7,8 +7,8 @@ const cart = reactive({
   total_price: 0,
 })
 
-const useCart = (cartSerialized) => {
-  Object.assign(cart, JSON.parse(cartSerialized || '{}'))
+const useCart = (cartSerialized = '{}') => {
+  Object.assign(cart, JSON.parse(cartSerialized.replace(/[\n]/g, '\\n')))
 
   const emitEvent = (event, data = {}) => {
     window.dispatchEvent(new CustomEvent(event, { detail: data }));

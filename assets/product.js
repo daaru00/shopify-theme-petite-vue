@@ -5,8 +5,8 @@ const store = reactive({
   variant: {}
 })
 
-const useProduct = (productSerialized, variantId) => {
-  Object.assign(store.product, JSON.parse(productSerialized || '{}'))
+const useProduct = (productSerialized = '{}', variantId) => {
+  Object.assign(store.product, JSON.parse(productSerialized.replace(/[\n]/g, '\\n')))
   
   const getVariant = (id) => {
     return store.product.variants.find(variant => `${variant.id}` === `${id}`)

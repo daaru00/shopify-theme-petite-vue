@@ -8,26 +8,29 @@ This repository is an example that demonstrate how to use [Petite Vue](https://g
 
 The deploy and development procedure use the [Shopify CLI](https://shopify.dev/themes/tools/cli/getting-started#preview-test-and-share-your-theme). If you haven't already, install and configure it.
 
-Start login to Shopify:
-```bash
-shopify login
-```
-then initialize a new theme based on this example (replace `<my theme name>` with the name of your theme):
+Initialize a new theme based on this example (replace `<my theme name>` with the name of your theme):
 ```bash
 shopify theme init <my theme name> --clone-url https://github.com/daaru00/shopify-theme-petite-vue.git
 ```
 
-Use the `serve` command to upload theme as a development theme and watch for changes:
+Use the `dev` command to upload theme as a development theme and watch for changes:
 ```bash
-shopify theme serve
+shopify theme dev
 ```
+
+If not already logged you will be asked to login with verification code.
 
 Made your changes or use the example as it is, when you're ready publish change to your live theme:
 ```bash
 shopify theme push
 ```
 
-More infromation about theme development can be found at the [official Shopify documentation](https://shopify.dev/themes/getting-started).
+You can also specify the store via '--store' arguments:
+```bash
+shopify theme push --store example.myshopify.com
+```
+
+More information about theme development can be found at the [official Shopify documentation](https://shopify.dev/themes/getting-started).
 
 ## Petite Vue integration
 

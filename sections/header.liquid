@@ -22,7 +22,7 @@
 
 <div class="header-content">
   <h2>
-    <a v-cloak href="{{ routes.root_url }}">
+    <a href="{{ routes.root_url }}">
       {{ shop.name }}
     </a>
   </h2>
@@ -36,10 +36,10 @@
       {% render 'icon-cart' %}
     </i>
     <span v-else-if="cart.loading">
-      ..
+      {% render 'icon-loading' %}
     </span>
 
-    <span class="bubble" v-if="cart.item_count > 0" v-text="cart.item_count"></span>
+    <span class="bubble" v-if="!cart.loading && cart.item_count > 0" v-text="cart.item_count"></span>
   </a>
 </div>
 

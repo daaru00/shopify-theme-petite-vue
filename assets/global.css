@@ -5,6 +5,15 @@
 [v-cloak] {
   opacity: 0;
 }
+[v-cloak] [v-if] {
+  display: none;
+}
+[v-cloak] [v-else-if] {
+  display: none;
+}
+[v-cloak] [v-else] {
+  display: none;
+}
 
 /*
  * Minimal styles

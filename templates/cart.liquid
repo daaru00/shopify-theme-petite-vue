@@ -54,8 +54,7 @@
     </p>
 
     <div v-cloak v-if="cart.items.length > 0">
-      <h3>{{ 'sections.cart.subtotal' | t }}</h3>
-      <h2>{{ cart.total_price | money }}</h2>
+      <h2 v-text="formatPrice(cart.total_price)">{{ cart.total_price | money }}</h2>
 
       <button class="primary" type="submit" name="checkout">
         {{ 'sections.cart.checkout' | t }}
