@@ -7,7 +7,7 @@
 <div class="grid">
   {%- for product in collection.products -%}
     <article class="product-card">
-      <img v-if="product.featured_image" :src="product.featured_image" />
+      <img src="{{ product.featured_image.src }}" />
       <a href="{{ product.url }}">
         <h2>{{ product.title }}</h2>
       </a>

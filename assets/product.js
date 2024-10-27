@@ -1,19 +1,25 @@
 import { reactive } from 'https://unpkg.com/petite-vue?module'
 
-const store = reactive({
-  product: {},
-  variant: {}
+const product = reactive({
+  id: null,
+  variants: [],
+  related: [],
+  complementary: []
+})
+
+const variant = reactive({
+  id: null
 })
 
 const useProduct = (productSerialized = '{}', variantId) => {
-  Object.assign(store.product, JSON.parse(productSerialized.replace(/[\n]/g, '\\n')))
-  
-  const getVariant = (id) => {
-    return store.product.variants.find(variant => `${variant.id}` === `${id}`)
+  Object.assign(product, JSON.parse(productSerialized.replace(/[\n]/g, '\\n')))
+
+  const emitEvent = (event, data = {}) => {
+    window.dispatchEvent(new CustomEvent(event, { detail: data }));
   }
   
-  if (variantId) {
-    store.variant = getVariant(variantId)
+  const getVariant = (id) => {
+    return product.variants.find(variant => `${variant.id}` === `${id}`)
   }
 
   const updateVariantQueryParam = (variantId) => {
@@ -21,33 +27,36 @@ const useProduct = (productSerialized = '{}', variantId) => {
     window.history.replaceState({ }, '', `${url}?variant=${variantId}`);
   }
 
-  if (variantId) {
+  const selectVariant = (variantId) => {
+    Object.assign(variant, getVariant(variantId))
     updateVariantQueryParam(variantId)
+    emitEvent('variantchanged', variant)
   }
-
-  const getProduct = async () => {
-    const res = await fetch('/cart.js', {
-      method: 'GET'
-    })
-
-    return reactive(await res.json())
+  
+  if (variantId) {
+    selectVariant(variantId)
   }
 
   const formatPrice = (price) => {
     return '€' + (price/100).toFixed(2).replace('.', ',')
   }
 
+  const getRecommendedProducts = async (intent = 'related') => {
+    const res = await fetch(`/recommendations/products.json?product_id=${product.id}&intent=${intent}`, {
+      method: 'GET'
+    })
+
+    const { products } = await res.json()
+    product[intent] = products 
+  }
+
   return {
-    get product() {
-      return store.product
-    },
-    get variant() {
-      return store.variant
-    },
-    updateVariantQueryParam,
-    getProduct,
+    product,
+    variant,
+    selectVariant,
     getVariant,
-    formatPrice
+    formatPrice,
+    getRecommendedProducts
   }
 }
 

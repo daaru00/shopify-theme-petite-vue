@@ -8,11 +8,23 @@
       }
     },
     "products": {
-      "type": "products-list"
+      "type": "products-list",
+      "settings": {
+        "title": "Products",
+        "collection": "frontpage"
+      }
+    },
+    "text_xUAaDL": {
+      "type": "text",
+      "settings": {
+        "title": "More",
+        "body": "<p><a href=\"/collections/all\" title=\"All products\">All products</a></p>"
+      }
     }
   },
   "order": [
     "hero",
-    "products"
+    "products",
+    "text_xUAaDL"
   ]
 }

@@ -21,6 +21,13 @@
 
 .header-content h2 {
   padding-left: 1em;
+  width: calc(100% / 4);
+}
+
+.header-content .cart-icon {
+  position: relative;
+  width: calc(100% / 4);
+  text-align: right;
 }
 
 .header-content .cart-icon .bubble {
@@ -36,6 +43,25 @@
 .header-content .cart-icon .icon {
   height: 3.5em;
   width: 3.5em;
+}
+
+.header-content .search {
+  position: relative;
+  width: calc(100% / 4);
+  text-align: center;
+}
+
+.header-content .search .search-results {
+  position: absolute;
+  border: 1px solid black;
+  top: 1.5em;
+  background: white;
+  width: calc(100% - 2px);
+  border: 1px solid;
+}
+
+.header-content .search .search-results .search-result {
+  margin-left: 2px;
 }
 
 .nav-content ul {
@@ -121,4 +147,8 @@ select {
   background-color: white;
   border: 1px solid black;
   padding-left: 0.5em;
+}
+
+a {
+  color: inherit;
 }

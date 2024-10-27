@@ -1,8 +1,10 @@
 <script type="module">
   import { createApp } from 'https://unpkg.com/petite-vue?module'
   import { useCart } from '{{ "cart.js" | asset_url }}'
+  import { useSearch } from '{{ "search.js" | asset_url }}'
 
   const { cart } = useCart('{{ cart | json }}')
+  const { search, suggest } = useSearch()
 
   window.addEventListener('cartchanged', ({ detail }) => {
     console.log('cart changed!', detail)
@@ -14,6 +16,8 @@
 
   createApp({
     cart,
+    search,
+    suggest,
     get isCartEmpty() {
       return cart.item_count === 0
     }
@@ -26,6 +30,13 @@
       {{ shop.name }}
     </a>
   </h2>
+
+  <div class="search" v-cloak>
+    <input type="text" name="search" v-model="search.query" v-effect="suggest()" />
+    <div class="search-results" v-for="result in search.results.products">
+      <a class="search-result" v-text="result.title" :href="result.url"></a>
+    </div>
+  </div>
 
   <a class="cart-icon" v-cloak href="{{ routes.cart_url }}">
 
