@@ -16,8 +16,17 @@ const useSearch = () => {
   const { emitEvent, events } = useEvents()
 
   const suggest = async () => {
-    search.loading = true
+    if (!search.query) {
+      Object.assign(search.results, {
+        collections:[],
+        pages:[],
+        products:[],
+        queries:[]
+      })
+      return
+    }
 
+    search.loading = true
     let res = await fetch(`/search/suggest.json?q=${search.query}`, {
       method: 'GET'
     })

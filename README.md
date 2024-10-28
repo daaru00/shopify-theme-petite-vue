@@ -69,7 +69,7 @@ will not works because Shopify will replace `{{ test }}` on server side with an 
 </section>
 ```
 
-There are two workaround for this:
+There are few workaround for this:
 
 1. Surround any Petite Vue template with Liquid `raw` tag, this will tells to Liquid to skip interpolation and left the html intact for the frontend:
 ```html
@@ -84,6 +84,19 @@ There are two workaround for this:
 ```html
 <section id="page">
   <span v-text="test"></span>
+</section>
+```
+
+3. Use custom delimiters for Petite Vue interpolation
+
+```js
+createApp({
+  $delimiters: ['${', '}']
+}).mount()
+```
+```html
+<section id="page">
+  <span>${test}</span>
 </section>
 ```
 

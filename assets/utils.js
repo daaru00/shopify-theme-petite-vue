@@ -1,3 +1,5 @@
+const eventBus = new Comment('event-bus');
+
 const useEvents = () => {
   const events = {
     'CART_CHANGED': 'cartchanged',
@@ -6,11 +8,11 @@ const useEvents = () => {
   }
 
   const emitEvent = (event, data = {}) => {
-    window.dispatchEvent(new CustomEvent(event, { detail: data }))
+    eventBus.dispatchEvent(new CustomEvent(event, { detail: data }))
   }
 
   const listenEvent = (event, callback) => {
-    window.addEventListener(event, ({ detail }) => {
+    eventBus.addEventListener(event, ({ detail }) => {
       callback(detail)
     })
   }
@@ -32,4 +34,25 @@ const useSerializer = () => {
   }
 }
 
-export { useEvents, useSerializer }
+const useDebounce = (delayMs = 500) => {
+  let timeout = null;
+
+  const debounce = (callback) => {
+    console.log('debounce..');
+    
+    if (timeout) {
+      clearTimeout(timeout)
+    }
+    
+    timeout = setTimeout(() => {
+      callback();
+    }, delayMs || 500);
+  }
+
+  return {
+    debounce
+  }
+}
+
+
+export { useEvents, useSerializer, useDebounce }

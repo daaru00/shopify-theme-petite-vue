@@ -2,7 +2,7 @@
   import { createApp } from 'https://unpkg.com/petite-vue?module'
   import { useCart } from '{{ "cart.js" | asset_url }}'
   import { useSearch } from '{{ "search.js" | asset_url }}'
-  import { useEvents } from '{{ "utils.js" | asset_url }}'
+  import { useEvents, useDebounce } from '{{ "utils.js" | asset_url }}'
 
   const { cart } = useCart('{{ cart | json }}')
   const { search, suggest } = useSearch()
@@ -18,10 +18,17 @@
     console.log('search result changed!', data)
   });
 
+  const { debounce } = useDebounce()
+  const debouncedSuggest = () => {
+    debounce(suggest)
+  }
+
   createApp({
     cart,
     search,
-    suggest,
+    debouncedSuggest: () => {
+      debounce(suggest)
+    },
     get isCartEmpty() {
       return cart.item_count === 0
     }
@@ -38,7 +45,7 @@
   </div>
 
   <div class="header-search" v-cloak>
-    <input type="text" name="search" v-model="search.query" v-effect="suggest()" />
+    <input type="text" name="search" v-model="search.query" v-effect="debouncedSuggest(search.query)" />
     <div class="search-results" v-if="search.query">
       <div v-for="result in search.results.products" class="search-result">
         <a v-text="result.title" :href="result.url"></a>
