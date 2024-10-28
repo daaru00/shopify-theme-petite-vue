@@ -3,31 +3,9 @@
  * Demo styles
  */
 
-.header-content {
-  border-bottom: 1px solid black;
-  background-color: white;
-
-  width: 100%;
-  display: inline-flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.header-content a, .product-card a, .nav-content a {
-  text-decoration: none;
-  color: inherit;
-}
-
-.header-content h2 {
-  padding-left: 1em;
-  width: calc(100% / 4);
-}
-
 .header-content .cart-icon {
   position: relative;
-  width: calc(100% / 4);
-  text-align: right;
+  display: block;
 }
 
 .header-content .cart-icon .bubble {
@@ -45,22 +23,16 @@
   width: 3.5em;
 }
 
-.header-content .search {
-  position: relative;
-  width: calc(100% / 4);
-  text-align: center;
-}
-
-.header-content .search .search-results {
+.header-content .search-results {
   position: absolute;
   border: 1px solid black;
   top: 1.5em;
   background: white;
   width: calc(100% - 2px);
-  border: 1px solid;
+  min-height: 8em;
 }
 
-.header-content .search .search-results .search-result {
+.header-content .search-results .search-result {
   margin-left: 2px;
 }
 
@@ -152,3 +124,14 @@ select {
 a {
   color: inherit;
 }
+
+input {
+  background-color: white;
+  border: 1px solid black;
+}
+
+input:focus{
+  outline: 0;
+  box-shadow: none;
+  border: 2px solid black;
+ }

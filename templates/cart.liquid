@@ -9,57 +9,45 @@
   createApp({
     cart,
     formatPrice,
-    async removeFromCart(item) {
-      console.log('removing..', item.variant_id)
-      await removeVariantFromCart(item.variant_id)
-      console.log('removed!', item.variant_id)
-    },
-    async updateQuantity(item, quantity) {
-      console.log('updating..', item.variant_id, quantity)
-      await updateVariantCartQuantity(item.variant_id, quantity)
-      console.log('updating!', item.variant_id, quantity)
-    },
-  }).mount('#page')
+    removeVariantFromCart,
+    updateVariantCartQuantity
+  }).mount('#cart')
 </script>
 
-<section id="page">
+<section id="cart">
 
   <h1>{{ 'sections.cart.title' | t }}</h1>
 
-  <form action="{{ routes.cart_url }}" method="post">
+  <div class="grid">
+    <article v-cloak v-for="item in cart.items" :key="item.id" class="product-card">
+      <h2 v-text="item.title"></h2>
+      <h3 v-text="formatPrice(item.price)"></h3>
+      
+      <div class="card-buttons">
+        <button type="button" :disabled="cart.loading" @click="updateVariantCartQuantity(item.variant_id, item.quantity - 1)">
+          {% render 'icon-minus' %}
+        </button>
+        <strong class="cart-qty" v-text="cart.loading ? '..' : item.quantity"></strong>
+        <button type="button" :disabled="cart.loading" @click="updateVariantCartQuantity(item.variant_id, item.quantity + 1)">
+          {% render 'icon-plus' %}
+        </button>
+  
+        <button type="button" :disabled="cart.loading" @click="removeVariantFromCart(item.variant_id)">
+          {% render 'icon-remove' %}
+        </button>
+      </div>
+    </article>
+  </div>
 
-    <div class="grid">
-      <article v-cloak v-for="item in cart.items" :key="item.id" class="product-card">
-        <h2 v-text="item.title"></h2>
-        <h3 v-text="formatPrice(item.price)"></h3>
-        
-        <div class="card-buttons">
-          <button type="button" :disabled="cart.loading" @click="updateQuantity(item, item.quantity - 1)">
-            {% render 'icon-minus' %}
-          </button>
-          <strong class="cart-qty" v-text="cart.loading ? '..' : item.quantity"></strong>
-          <button type="button" :disabled="cart.loading" @click="updateQuantity(item, item.quantity + 1)">
-            {% render 'icon-plus' %}
-          </button>
-    
-          <button type="button" :disabled="cart.loading" @click="removeFromCart(item)">
-            {% render 'icon-remove' %}
-          </button>
-        </div>
-      </article>
-    </div>
+  <p v-cloak v-if="cart.items.length === 0">
+    {{ 'sections.cart.empty' | t }}
+  </p>
 
-    <p v-cloak v-if="cart.items.length === 0">
-      {{ 'sections.cart.empty' | t }}
-    </p>
+  <div v-cloak v-if="cart.items.length > 0">
+    <h2 v-text="formatPrice(cart.total_price)">{{ cart.total_price | money }}</h2>
 
-    <div v-cloak v-if="cart.items.length > 0">
-      <h2 v-text="formatPrice(cart.total_price)">{{ cart.total_price | money }}</h2>
-
-      <button class="primary" type="submit" name="checkout">
-        {{ 'sections.cart.checkout' | t }}
-      </button>
-    </div>    
-  </form>
-
+    <button class="primary" type="submit" name="checkout">
+      {{ 'sections.cart.checkout' | t }}
+    </button>
+  </div>
 </section>

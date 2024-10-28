@@ -12,11 +12,7 @@
     cart,
     formatPrice,
     selectVariant,
-    async addToCart() {
-      console.log('adding..', this.variant)
-      await addVariantToCart(this.variant.id)
-      console.log('added!', this.variant)
-    },
+    addVariantToCart,
     mounted() {
       getRecommendedProducts()
     }
@@ -45,10 +41,10 @@
   {% endif %}
 
   <div v-for="product in product.related">
-
+    
   </div>
 
-  <button v-cloak class="primary" @click="addToCart()" :disabled="cart.loading">
+  <button v-cloak class="primary" @click="addVariantToCart(variant.id)" :disabled="cart.loading">
     {{ 'products.product.add_to_cart' | t }}
   </button>
 

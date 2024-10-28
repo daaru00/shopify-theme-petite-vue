@@ -1,4 +1,5 @@
 import { reactive } from 'https://unpkg.com/petite-vue?module'
+import { useEvents } from './utils.js'
 
 const search = reactive({
   query: null,
@@ -12,9 +13,7 @@ const search = reactive({
 })
 
 const useSearch = () => {
-  const emitEvent = (event, data = {}) => {
-    window.dispatchEvent(new CustomEvent(event, { detail: data }));
-  }
+  const { emitEvent, events } = useEvents()
 
   const suggest = async () => {
     search.loading = true
@@ -25,7 +24,7 @@ const useSearch = () => {
 
     const { resources: { results } } = await res.json()
     Object.assign(search.results, results)
-    emitEvent('searchresultschanged', results)
+    emitEvent(events.SEARCH_RESULT_CHANGED, results)
 
     search.loading = false
   }

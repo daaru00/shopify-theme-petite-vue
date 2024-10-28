@@ -1,4 +1,5 @@
 import { reactive } from 'https://unpkg.com/petite-vue?module'
+import { useEvents, useSerializer } from './utils.js'
 
 const cart = reactive({
   items: [],
@@ -8,11 +9,10 @@ const cart = reactive({
 })
 
 const useCart = (cartSerialized = '{}') => {
-  Object.assign(cart, JSON.parse(cartSerialized.replace(/[\n]/g, '\\n')))
+  const { emitEvent, events } = useEvents()
+  const { parse } = useSerializer()
 
-  const emitEvent = (event, data = {}) => {
-    window.dispatchEvent(new CustomEvent(event, { detail: data }));
-  }
+  Object.assign(cart, parse(cartSerialized))
 
   const refreshItems = async () => {
     cart.loading = true
@@ -43,7 +43,7 @@ const useCart = (cartSerialized = '{}') => {
 
     await refreshItems()
 
-    emitEvent('cartchanged', {
+    emitEvent(events.CART_CHANGED, {
       type: 'add',
       id,
       quantity
@@ -67,7 +67,7 @@ const useCart = (cartSerialized = '{}') => {
 
     await refreshItems()
 
-    emitEvent('cartchanged', {
+    emitEvent(events.CART_CHANGED, {
       type: 'updated',
       id,
       quantity
@@ -91,7 +91,7 @@ const useCart = (cartSerialized = '{}') => {
 
     await refreshItems()
 
-    emitEvent('cartchanged', {
+    emitEvent(events.CART_CHANGED, {
       type: 'removed',
       id
     })

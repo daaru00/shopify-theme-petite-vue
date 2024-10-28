@@ -2,16 +2,20 @@
   import { createApp } from 'https://unpkg.com/petite-vue?module'
   import { useCart } from '{{ "cart.js" | asset_url }}'
   import { useSearch } from '{{ "search.js" | asset_url }}'
+  import { useEvents } from '{{ "utils.js" | asset_url }}'
 
   const { cart } = useCart('{{ cart | json }}')
   const { search, suggest } = useSearch()
-
-  window.addEventListener('cartchanged', ({ detail }) => {
-    console.log('cart changed!', detail)
+  
+  const { listenEvent, events } = useEvents()
+  listenEvent(events.CART_CHANGED, (data) => {
+    console.log('cart changed!', data)
   });
-
-  window.addEventListener('variantchanged', ({ detail }) => {
-    console.log('variant changed!', detail)
+  listenEvent(events.VARIANT_CHANGED, (data) => {
+    console.log('variant changed!', data)
+  });
+  listenEvent(events.SEARCH_RESULT_CHANGED, (data) => {
+    console.log('search result changed!', data)
   });
 
   createApp({
@@ -25,33 +29,37 @@
 </script>
 
 <div class="header-content">
-  <h2>
-    <a href="{{ routes.root_url }}">
-      {{ shop.name }}
-    </a>
-  </h2>
+  <div class="header-title">
+    <h2>
+      <a href="{{ routes.root_url }}">
+        {{ shop.name }}
+      </a>
+    </h2>
+  </div>
 
-  <div class="search" v-cloak>
+  <div class="header-search" v-cloak>
     <input type="text" name="search" v-model="search.query" v-effect="suggest()" />
-    <div class="search-results" v-for="result in search.results.products">
-      <a class="search-result" v-text="result.title" :href="result.url"></a>
+    <div class="search-results" v-if="search.query">
+      <div v-for="result in search.results.products" class="search-result">
+        <a v-text="result.title" :href="result.url"></a>
+      </div>
     </div>
   </div>
 
-  <a class="cart-icon" v-cloak href="{{ routes.cart_url }}">
-
-    <i v-if="!cart.loading && isCartEmpty">
-      {% render 'icon-cart-empty' %}
-    </i>
-    <i v-else-if="!cart.loading && !isCartEmpty">
-      {% render 'icon-cart' %}
-    </i>
-    <span v-else-if="cart.loading">
-      {% render 'icon-loading' %}
-    </span>
-
-    <span class="bubble" v-if="!cart.loading && cart.item_count > 0" v-text="cart.item_count"></span>
-  </a>
+  <div class="header-icons">
+    <a class="cart-icon" v-cloak href="{{ routes.cart_url }}">
+      <i v-if="!cart.loading && isCartEmpty">
+        {% render 'icon-cart-empty' %}
+      </i>
+      <i v-else-if="!cart.loading && !isCartEmpty">
+        {% render 'icon-cart' %}
+      </i>
+      <span v-else-if="cart.loading">
+        {% render 'icon-loading' %}
+      </span>
+      <span class="bubble" v-if="!cart.loading && cart.item_count > 0" v-text="cart.item_count"></span>
+    </a>
+  </div>
 </div>
 
 {% schema %}

@@ -1,4 +1,5 @@
 import { reactive } from 'https://unpkg.com/petite-vue?module'
+import { useEvents, useSerializer } from './utils.js'
 
 const product = reactive({
   id: null,
@@ -12,12 +13,11 @@ const variant = reactive({
 })
 
 const useProduct = (productSerialized = '{}', variantId) => {
-  Object.assign(product, JSON.parse(productSerialized.replace(/[\n]/g, '\\n')))
+  const { emitEvent, events } = useEvents()
+  const { parse } = useSerializer()
 
-  const emitEvent = (event, data = {}) => {
-    window.dispatchEvent(new CustomEvent(event, { detail: data }));
-  }
-  
+  Object.assign(product, parse(productSerialized))
+
   const getVariant = (id) => {
     return product.variants.find(variant => `${variant.id}` === `${id}`)
   }
@@ -30,7 +30,7 @@ const useProduct = (productSerialized = '{}', variantId) => {
   const selectVariant = (variantId) => {
     Object.assign(variant, getVariant(variantId))
     updateVariantQueryParam(variantId)
-    emitEvent('variantchanged', variant)
+    emitEvent(events.VARIANT_CHANGED, { id: variantId })
   }
   
   if (variantId) {
